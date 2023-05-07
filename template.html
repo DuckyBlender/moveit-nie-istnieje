@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta property="og:title" content="Moveit Jokes" />
+    <meta property="og:description" content="Moveit Jokes" />
+    <title>Moveit Jokes</title>
+    <style>
+      body {
+        font-family: "Courier New", monospace;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #222;
+        color: #fff;
+        transition: background-color 0.5s, color 0.5s;
+      }
+
+      .quote-container {
+        font-size: 2rem;
+        overflow: hidden;
+        border-right: 2px solid;
+        animation: blinking-cursor 1s infinite;
+        width: 100%; /* Set the width of the container */
+        word-wrap: break-word; /* Break words if necessary to prevent overflow */
+        text-align: center;
+      }
+
+      @keyframes blinking-cursor {
+        0% {
+          border-color: transparent;
+        }
+        50% {
+          border-color: currentColor;
+        }
+        100% {
+          border-color: transparent;
+        }
+      }
+
+      footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+        font-size: 12px;
+      }
+
+      a {
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="quote-container" id="quote-container"></div>
+
+    <script>
+      const quote = "{{joke}}";
+      const quoteContainer = document.getElementById("quote-container");
+      let index = 0;
+
+      function typeWriter() {
+        if (index < quote.length) {
+          quoteContainer.innerHTML += quote.charAt(index);
+          index++;
+          setTimeout(typeWriter, 4);
+        }
+      }
+
+      typeWriter();
+    </script>
+
+    <!-- Footer for credits -->
+    <footer>
+      <div class="footer">
+        <p>
+          Made with <span class="heart">❤</span> by
+          <a href="https://github.com/DuckyBlender" target="_blank"
+            >DuckyBlender</a
+          >
+          | Reload for another joke
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

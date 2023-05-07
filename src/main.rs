@@ -1,30 +1,36 @@
-use lambda_runtime::{Context, Error};
+use lambda_http::{
+    http::{Response, StatusCode},
+    run, service_fn, Error, IntoResponse, Request,
+};
 use rand::prelude::SliceRandom;
-use serde::{Deserialize, Serialize};
+use tokio::fs;
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    let handler = lambda_runtime::handler_fn(handler);
-    lambda_runtime::run(handler).await.unwrap();
-    Ok(())
+    run(service_fn(handler)).await
 }
 
-#[derive(Deserialize)]
-struct Event {}
-
-#[derive(Serialize)]
-struct Output {
-    joke: String,
-}
-
-async fn handler(_: Event, _: Context) -> Result<Output, Error> {
+async fn handler(_: Request) -> Result<impl IntoResponse, Error> {
     // Get random line from file
-    let file = tokio::fs::read_to_string("jokes.txt")
+    let jokes = fs::read_to_string("jokes.txt")
         .await
         .expect("Unable to read file");
-    let lines: Vec<&str> = file.split("\n").collect();
+    let lines: Vec<&str> = jokes.split("\n").collect();
     let joke = lines.choose(&mut rand::thread_rng()).unwrap();
-    Ok(Output {
-        joke: joke.to_string(),
-    })
+
+    // Import the HTML template
+    let html = fs::read_to_string("template.html")
+        .await
+        .expect("Unable to read file");
+
+    // Replace the placeholder with the joke
+    let html = html.replace("{{joke}}", joke);
+
+    // Return the HTML website
+    let response = Response::builder()
+        .status(StatusCode::OK)
+        .header("content-type", "text/html")
+        .body(html)
+        .map_err(Box::new)?;
+    Ok(response)
 }

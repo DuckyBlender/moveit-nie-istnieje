@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta property="og:title" content="Moveit Jokes" />
-    <meta property="og:description" content="Moveit Jokes" />
+    <meta property="og:description" content="{{joke}}" />
     <title>Moveit Jokes</title>
     <style>
       body {
@@ -23,22 +23,9 @@
         font-size: 2rem;
         overflow: hidden;
         border-right: 2px solid;
-        animation: blinking-cursor 1s infinite;
         width: 100%; /* Set the width of the container */
         word-wrap: break-word; /* Break words if necessary to prevent overflow */
         text-align: center;
-      }
-
-      @keyframes blinking-cursor {
-        0% {
-          border-color: transparent;
-        }
-        50% {
-          border-color: currentColor;
-        }
-        100% {
-          border-color: transparent;
-        }
       }
 
       footer {
@@ -58,7 +45,7 @@
     <div class="quote-container" id="quote-container"></div>
 
     <script>
-      const quote = "{{joke}}";
+      const quote = '"{{joke}}"';
       const quoteContainer = document.getElementById("quote-container");
       let index = 0;
 
@@ -77,9 +64,10 @@
     <footer>
       <div class="footer">
         <p>
-          Made with <span class="heart">❤</span> by
-          <a href="https://github.com/DuckyBlender" target="_blank"
-            >DuckyBlender</a
+          <a
+            href="https://github.com/DuckyBlender/moveit-nie-istnieje"
+            target="_blank"
+            >Source code</a
           >
           | Reload for another joke
         </p>

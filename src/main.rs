@@ -12,7 +12,7 @@ async fn main() -> Result<(), Error> {
     let jokes = fs::read_to_string("jokes.txt")
         .await
         .expect("Unable to read file");
-    let lines: Vec<&str> = jokes.split("\n").collect();
+    let lines: Vec<&str> = jokes.split('\n').collect();
     let lines = Arc::new(lines);
     println!("Jokes: {}", lines.len());
     run(service_fn(move |req| handler(req, lines.clone()))).await
@@ -27,7 +27,7 @@ async fn handler(_: Request, lines: Arc<Vec<&str>>) -> Result<impl IntoResponse,
         .expect("Unable to read file");
 
     // Replace the placeholder with the joke
-    let html = html.replace("\"{{joke}}\"", joke);
+    let html = html.replace("{{joke}}", joke);
 
     // Return the HTML website
     let response = Response::builder()

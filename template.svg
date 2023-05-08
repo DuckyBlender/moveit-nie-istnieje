@@ -1,0 +1,10 @@
+<svg viewBox="0 0 1320 300" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text {
+      fill: #365fa0;
+      font-size: 20px;
+      font-family: "Russo One", sans-serif;
+    }
+  </style>
+  <text x="50%" y="50%" dy=".35em" text-anchor="middle" id="quote-container">{{joke}}</text>
+</svg>

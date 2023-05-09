@@ -29,7 +29,7 @@ async fn handler(req: Request, lines: Arc<Vec<&str>>) -> Result<Response<String>
 async fn svg_handler(lines: Arc<Vec<&str>>) -> Result<Response<String>, Error> {
     let joke = lines.choose(&mut rand::thread_rng()).unwrap();
 
-    let svg = fs::read_to_string("template.svg")
+    let svg = fs::read_to_string("web/template.svg")
         .await
         .expect("Unable to read file");
 
@@ -46,7 +46,7 @@ async fn svg_handler(lines: Arc<Vec<&str>>) -> Result<Response<String>, Error> {
 async fn html_handler(lines: Arc<Vec<&str>>) -> Result<Response<String>, Error> {
     let joke = lines.choose(&mut rand::thread_rng()).unwrap();
 
-    let html = fs::read_to_string("template.html")
+    let html = fs::read_to_string("web/template.html")
         .await
         .expect("Unable to read file");
 

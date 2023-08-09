@@ -2,7 +2,7 @@ use lambda_http::{
     http::{Response, StatusCode},
     run, service_fn, Error, Request,
 };
-use rand::prelude::SliceRandom;
+use rand::{prelude::SliceRandom, Rng};
 use std::sync::Arc;
 use tokio::fs;
 
@@ -21,6 +21,7 @@ async fn handler(req: Request, lines: Arc<Vec<&str>>) -> Result<Response<String>
     println!("Request: {}", req.uri().path());
     match req.uri().path() {
         "/svg" => svg_handler(lines).await,
+        "/json" => json_handler(lines).await,
         "/" => html_handler(lines).await,
         _ => not_found_handler().await,
     }
@@ -56,6 +57,26 @@ async fn html_handler(lines: Arc<Vec<&str>>) -> Result<Response<String>, Error> 
         .status(StatusCode::OK)
         .header("content-type", "text/html")
         .body(html)
+        .map_err(Box::new)?;
+    Ok(response)
+}
+
+async fn json_handler(lines: Arc<Vec<&str>>) -> Result<Response<String>, Error> {
+    // Generate a random number between 0 and lines.len()
+    let id = rand::thread_rng().gen_range(0..lines.len());
+    // Get the joke at the random index
+    let joke = lines[id];
+
+    // Serialize the json using serde_json
+    let json = serde_json::json!({
+        "id": id,
+        "joke": joke,
+    });
+
+    let response = Response::builder()
+        .status(StatusCode::OK)
+        .header("content-type", "application/json")
+        .body(json.to_string())
         .map_err(Box::new)?;
     Ok(response)
 }

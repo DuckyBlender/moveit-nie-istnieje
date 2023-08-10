@@ -8,7 +8,7 @@ use tokio::fs;
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    let jokes = fs::read_to_string("jokes.txt")
+    let jokes = fs::read_to_string("generate/jokes.txt")
         .await
         .expect("Unable to read file");
     let lines: Vec<&str> = jokes.split('\n').collect();
@@ -29,12 +29,15 @@ async fn handler(req: Request, lines: Arc<Vec<&str>>) -> Result<Response<String>
 
 async fn svg_handler(lines: Arc<Vec<&str>>) -> Result<Response<String>, Error> {
     let joke = lines.choose(&mut rand::thread_rng()).unwrap();
+    let joke = joke.trim();
 
     let svg = fs::read_to_string("web/template.svg")
         .await
         .expect("Unable to read file");
 
     let svg = svg.replace("{{joke}}", joke);
+
+    println!("Sending SVG with joke: {}", joke);
 
     let response = Response::builder()
         .status(StatusCode::OK)
@@ -46,12 +49,15 @@ async fn svg_handler(lines: Arc<Vec<&str>>) -> Result<Response<String>, Error> {
 
 async fn html_handler(lines: Arc<Vec<&str>>) -> Result<Response<String>, Error> {
     let joke = lines.choose(&mut rand::thread_rng()).unwrap();
+    let joke = joke.trim();
 
     let html = fs::read_to_string("web/template.html")
         .await
         .expect("Unable to read file");
 
     let html = html.replace("{{joke}}", joke);
+
+    println!("Sending HTML with joke: {}", joke);
 
     let response = Response::builder()
         .status(StatusCode::OK)
@@ -66,12 +72,15 @@ async fn json_handler(lines: Arc<Vec<&str>>) -> Result<Response<String>, Error> 
     let id = rand::thread_rng().gen_range(0..lines.len());
     // Get the joke at the random index
     let joke = lines[id];
+    let joke = joke.trim();
 
     // Serialize the json using serde_json
     let json = serde_json::json!({
         "id": id,
         "joke": joke,
     });
+
+    println!("Sending JSON with joke: {}", joke);
 
     let response = Response::builder()
         .status(StatusCode::OK)

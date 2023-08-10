@@ -8,7 +8,7 @@ use tokio::fs;
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    let jokes = fs::read_to_string("generate/jokes.txt")
+    let jokes = fs::read_to_string("jokes.txt")
         .await
         .expect("Unable to read file");
     let lines: Vec<&str> = jokes.split('\n').collect();
